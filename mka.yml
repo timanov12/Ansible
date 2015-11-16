@@ -1,0 +1,11 @@
+---
+- hosts: test
+# Tasks file for check_mk-agent
+  tasks:
+# This will download the check_mk agent in Centos OS
+   - name: Download Check_mk client
+     yum: name=https://mathias-kettner.de/download/check_mk-agent-1.2.4p5-1.noarch.rpm state=present
+# This will start xinetd service
+  tasks:
+  - name: start xinetd
+    service: name=xinetd state=started enabled=yes
