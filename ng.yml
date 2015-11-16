@@ -1,0 +1,40 @@
+#This task install nginx 
+---
+- hosts: mktst
+#  - name: Remove httpd package
+#    yum: name=httpd state=removed
+#    sudo: yes
+
+  tasks:
+
+  - name: Setting up nginx repository
+    copy:
+      dest: /etc/yum.repos.d/nginx.repo
+      content: |
+        [nginx]
+        name=nginx repo
+        baseurl=http://nginx.org/packages/centos/$releasever/$basearch/
+        gpgcheck=0
+        enabled=1
+
+  - name: Install nginx package
+    yum: name=nginx state=present
+    notify:
+    - start nginx
+
+  - name: Upload default index.php for host
+    copy: src=static_sugar/index.php dest=/usr/share/nginx/www/ mode=0644
+    register: php
+    ignore_errors: True
+
+  - name: Remove index.html for host
+    command: rm /usr/share/nginx/www/index.html
+    when: php|success
+
+  - name: Upload default index.html for host
+    copy: src=static_sugar/index.html dest=/usr/share/nginx/www/ mode=0644
+    when: php|failed
+
+  handlers:
+  - name: Starting nginx service
+    service: name=nginx state=started
