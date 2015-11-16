@@ -1,8 +1,8 @@
 ---
 - hosts: test
-# tasks that adds a iptables rule & restart iptables
+# tasks to add a new iptables rule from item_list below & to restart iptables
   tasks:
-  - name: Open the correct IPTables ports
+  - name: Open the one or more IpTables ports
     lineinfile: dest=/etc/sysconfig/iptables
               regexp="^-A INPUT -p {{item.protocol}} -m state --state NEW -m {{item.protocol}} --dport {{item.port}} -j ACCEPT$"
               line="-A INPUT -p {{item.protocol}} -m state --state NEW -m {{item.protocol}} --dport {{item.port}} -j ACCEPT"
