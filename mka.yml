@@ -6,6 +6,8 @@
    - name: Download Check_mk client
      yum: name=https://mathias-kettner.de/download/check_mk-agent-1.2.4p5-1.noarch.rpm state=present
 # This will start xinetd service
-  tasks:
-  - name: start xinetd
-    service: name=xinetd state=started enabled=yes
+   notify:
+   - restart xinetd sevice
+ handlers
+  - name: restart xinetd
+    service: name=xinetd state=restarted enabled=yes
