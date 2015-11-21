@@ -1,0 +1,10 @@
+---
+#This line defined in hosts file: 
+#>>>>[ec2-test]hostname.useast1 ansible_ssh_user=ec2-user ansible_ssh_private_key_file=/root/.secret.pem ansible_sudo=true
+
+- hosts: ec2-test
+  user: ec2-user
+  sudo: yes
+  tasks:
+  - name: Update all packages to latest
+    yum: name=* state=latest
